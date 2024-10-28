@@ -1,0 +1,315 @@
+---
+title: "Homework 2"
+author: "Vaishnavi Sathiyamoorthy"
+date: "2024-09-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+set.seed(123)
+```
+
+## Question 1. Sickle cell anemia
+
+Sickle cell anemia is a genetic disease due to defects in the HBB gene. Each person has two copies of the HBB gene, one copy from the father and one copy from the mother. Each copy of the HBB gene can be dominant, or recessive. A person can have (a) two copies of the dominant version (does not have the disease; cannot transmit the disease), (b) one copy of the dominant version and one copy of the recessive version (does not have the disease; is a carrier and can transmit the disease to progeny), or (c) two copies of the recessive version (has the disease; can transmit the disease to progeny). For any given child, each parent passes one of his/her two copies of the HBB gene to the child and each copy has a 0.5 probability of being passed on.
+
+### Question 1a. Calculate the probability of a child having the disease if: both parents are carriers (neither have the disease)
+
+#### Solution
+```{r}
+# punnett square of Aa x Aa is AA, Aa, Aa, aa
+1/4
+```
+
+The probability of a child having sickle cell disease if both parents are carriers is 25%.
+
+### Question 1f. Calculate the probability that the child is a carrier if: one parent is a carrier and the other parent has the disease
+
+#### Solution
+```{r}
+# punnett square of Aa x aa is Aa, Aa, aa, aa
+2/4
+```
+
+The probabilty that the child is a carrier if one parent is a carrier and one parent has the disease is 50%.
+
+## Question 2. SARS-Cov-2 antibody test
+
+Serology tests detect the presence of antibodies in the blood. These tests detect the body’s immune response to an infection caused by a virus rather than detecting the virus itself. Hence, they can determine if an individual had been infected but are not as useful to detecting an active infection (when the virus is present). A COVID-19 antibody test can be used to identify individuals who have developed an immune response to SARS-CoV-2, the virus that induces COVID-19 infection. The performance of a test is described by its sensitivity and specificity. Sensitivity is the ability of a test to identify a person with antibodies to SARS-CoV-2; in other words, it is the probability the test will be positive for antibodies when the person really has antibodies (the probability of a true positive). Specificity is the ability of a test to identify individuals without antibodies to SARS-CoV-2; in other words, it is the probability the test will be negative for antibodies when a person really does not have antibodies (the probability of a true negative). During the development stage of a SARS-CoV-2 antibody test, It was tested in 500 individuals who were confirmed COVID-19 cases. These individuals tested positive for the COVID-19 virus using a nucleic acid amplification test and have subsequently recovered from the infection. These individuals should have SARS- CoV-2 antibodies. It was also tested in 1000 stored samples that were collected and frozen (for other reasons) before SAR-CoV-2 is known to have circulated. Hence, these individuals could not have been infected prior to, or at the time, when the samples were collected. These individuals should not have SARS-CoV-2 antibodies. The results are below:
+
+                   | has antibody      | does not have antibodies
+-------------------|-------------------|---------------------------
++ for antibodies   |  469              |      40
+- for antibodies   |  31               |      960
+
+### Question 2a. Sensitivity
+What is the sensitivity of the test?
+
+#### Solution
+```{r}
+# Sensitivity = TP / (TP + FN)
+469 / (469 + 31)
+```
+
+Sensitivity of this antibody test is 0.938.
+
+### Question 2b. Specificity
+
+#### Solution
+```{r}
+# Specificity = TN / (TN + FP)
+960 / (960 + 40)
+```
+
+The specificity of this test is 0.96.
+
+### Question 2c. Fill out the table
+Suppose a test has a sensitivity of 0.95 and a specificity of 0.95. The positive predictive value of a test (PPV) is the probability that an individual has the antibodies if the test result was positive for antibodies. The negative predictive value (NPV) is the probability that an individual does not have the antibody if the test result was negative for antibodies. These probabilities depend on the proportion of people in the population who have antibodies (the prevalence). Suppose that prevalence for SARS-CoV-2 antibodies in the US is 0.05.
+
+Fill in the missing values in the table below based on information provided above.
+
+#### Solution:
+
+                   | present           | absent
+-------------------|-------------------|---------------------------
++ for antibodies   |  95               |      95
+- for antibodies   |  5                |      1805
+total              |  100              |      1900
+
+### Question 2d. Calculating PPV
+What is the PPV based on information provided above?
+
+#### Solution
+```{r}
+# PPV = TP / (TP + FP)
+95 / (95 + 95)
+```
+
+The PPV is 0.5.
+
+### Question 2e. Calculating NPV
+What is the NPV based on the information provided above?
+
+#### Solution
+```{r}
+# NVP = TN / (TN + FN)
+1805 / (1805 + 5)
+```
+
+NVP is 0.997.
+
+### Question 2f. Understanding PPV
+Explain what happens to the PPV as the prevalence of individuals with SARS-CoV-2 antibodies increases.
+
+#### Solution
+As the prevalence of individuals with SARS-CoV-2 antibodies increases, the PPV will increase.
+
+## Question 3. Proportion of obese individuals
+According to 2017-2018 data from the National Health and Nutrition Examine Survey (NHANES), the proportion of adults in the US who are obese (BMI > 30 kg/m2) is 42.4%.
+
+### Question 3a.
+If you take a random sample of 750 US adults, what is the expected number who are obese?
+
+#### Solution:
+```{r}
+n <- 750
+p <- 0.424
+n * p
+```
+
+The expected number of poeple to be obese is 318 out of 750 US adults.
+
+### Question 3b.
+What is the probability that the number of obese people in a random sample of size 750 is within one standard deviation of the expected value?
+
+#### Solution
+```{r}
+std_dev <- sqrt(n * p * (1 - p))
+pbinom(318 + std_dev, 750, 0.424) - pbinom(318 - std_dev, 750, 0.424)
+```
+
+The probability that the number of obese people in a random sample of size 750 is within one standard deviation of the expected value is 0.68.
+
+### Question 3c.
+What is the probability that the proportion of obese people in a sample of size 750 is between 0.35 and 0.38 (exclusive)?
+
+#### Solution
+```{r}
+pbinom((750 * 0.38), 750, 0.424) - pbinom((750 * 0.35), 750, 0.424)
+```
+The probability that the proportion of obese people in a sample of size 750 is between 0.35 and 0.38 is 0.02.
+
+### Question 3d.
+What is the smallest number such that we expect a 0.05 probability of obtaining this number of obese people or a number that is less than this number in a random sample of 750 US adults?
+
+#### Solution
+```{r}
+qbinom(0.05, 750, 0.424)
+```
+
+The smallest number that we can expect a 0.05 probability of obtaining this number of obese people or a number that is less than this is 296.
+
+### Question 3e.
+Is there evidence on the basis of this sample that the proportion of obese adults in Saudi Arabia is less than in the US?
+
+#### Solution
+```{r}
+pbinom(65, 170, 0.424)
+```
+
+## Question 4. Understanding sampling distribution for the sample proportion
+Suppose we are sampling from a population where it is known that 18.5% have diabetes (e.g. the population proportion π = 0.185). We plan to take a sample of size 300.
+
+### Question 4a.
+Describe the sampling distribution for the sample proportion computed from a sample of size 300 taken from a population with a population proportion of 0.185. Describe the distribution and give its mean value and its standard deviation.
+
+#### Solution
+```{r}
+n <- 300
+p <- 0.185
+sqrt((p * (1 - p)) / n)
+```
+
+300 * 0.185 ≥ 10
+55.5 ≥ 10
+
+300 * (1 - 0.185) ≥ 10
+244.5 ≥ 10
+
+This is approximately a normal distribution since the group that has diabetes and the group that does not have diabetes is ≥ 10. The mean of the distribution is 0.185. The standard deviation of the distribution is 0.388.
+
+### Question 4b.
+Generate a sampling distribution via simulation for the sample proportion of individuals with diabetes obtained from a sample of 300, p300, from a population with a population proportion of 0.185. Use 5000 simulated values. Plot this distribution. What is its mean and standard deviation calculated using the simulated samples?
+
+#### Solution
+```{r}
+sample_diab <- rbinom(5000, size = 300, prob = 0.185)
+mean(sample_diab)
+sd(sample_diab)
+hist(sample_diab, main = "Distribution of Sample Proportion of Individuals with Diabetes",
+     xlab = "Individuals with Diabetes")
+```
+
+The mean is 55.54 and the standard deviation is 6.69.
+
+### Question 4c.
+Simulate the normal distribution that would best describe the sampling distribution of the sample proportion for a sample of size 300 with π = 0.185 using 5000 simulated observations. Plot this distribution.
+
+```{r}
+sample_norm <- replicate(5000, mean(rbinom(300, 1, 0.185)))
+hist(sample_norm,
+     main = "Sampling Distribution of Sample of 300 with π = 0.185",
+     xlab = "Sample Proportions",
+     xaxt = "n")
+axis(1, at = seq(0, 0.4, by = 0.01))
+```
+
+### Question 4d.
+Make a qqplot comparing the simulated sampling distributions of the sample proportion based on a sample size of 300 patients (the one in 4b) to that of a normal distribution (the one in 4c), including a line that indicates a perfect relationship.
+
+#### Solution
+```{r}
+qqplot(sample_diab, sample_norm,
+       xlab = "Sample Distribution",
+       ylab = "Normal Distribution",
+       main = "Sample Distribution vs Normal Distribution")
+abline(lm(sort(sample_norm) ~ sort(sample_diab)))
+```
+
+### Question 4e.
+How do the two distributions compare? (Answer based on your qqplot in 4d.)
+
+#### Solution
+They have a positive linear relationship with a strong correlation.
+
+### Question 4f.
+Compute the probability that the sample proportion of individuals with diabetes in a sample of 300 is between 0.17 and 0.20, inclusive. Determine this using the KNOWN (not simulated) sampling distribution for the sample proportion.
+
+#### Solution
+```{r}
+pbinom(0.2 * 300, size = 300, prob = 0.185) - pbinom(0.17 * 300, size = 300, prob = 0.185)
+```
+
+The probability that the sample proportion of individuals with diabetes in a sample of 300 is between 0.17 and 0.20 is 0.49.
+
+### Question 4g.
+Approximate the probability that the sample proportion of individuals with diabetes in a sample of 300 is between 0.17 and 0.20, inclusive, using the best normal approximation to the sampling distribution. Determine this using the normal distribution (not simulated values).
+
+#### Solution
+```{r}
+standard_error <- sqrt((0.185 * (1 - 0.185)) / 300)
+z_lower <- (0.17 - 0.185) / standard_error
+z_upper <- (0.20 - 0.185) / standard_error
+pnorm(z_upper) - pnorm(z_lower)
+```
+
+The probability that the sample proportion of individuals with diabetes in a sample of 300 is between 0.17 and 0.20 is 0.50.
+
+### Question 4h.
+How do your answers to 4f and 4g compare?
+
+#### Solution
+The probability is roughly the same between the two.
+
+### Question 4i.
+Compute the probability that the sample proportion of individuals with diabetes in a sample of size 30 is between 0.17 and 0.20, inclusive. Determine this using the KNOWN (not simulated) sampling distribution for the sample proportion
+
+#### Solution
+```{r}
+pbinom(0.2 * 30, size = 30, prob = 0.185) - pbinom(0.17 * 30, size = 30, prob = 0.185)
+```
+
+The probability that the sample proportion of individuals with diabetes in a sample of 30 is between 0.17 and 0.20 is 0.18.
+
+### Question 4j.
+Approximate the probability that the sample proportion of individuals with diabetes in a sample of size 30 is between 0.17 and 0.20, inclusive, using the best normal approximation to the sampling distribution. Determine this using the normal distribution (not simulated values).
+
+#### Solution
+```{r}
+standard_error <- sqrt((0.185 * (1 - 0.185)) / 30)
+z_lower <- (0.17 - 0.185) / standard_error
+z_upper <- (0.20 - 0.185) / standard_error
+pnorm(z_upper) - pnorm(z_lower)
+```
+
+The probability that the sample proportion of individuals with diabetes in a sample of 30 is between 0.17 and 0.20 is 0.17.
+
+### Question 4k.
+How do your answers to 4i and 4j compare?
+
+#### Solution:
+The probabilities for i and j are similar. However, they are way lower compared to f and g.
+
+### Question 4l.
+Which do you think provides a better normal approximation of the sampling distribution for p? One for sample size of 30 or one for a sample size of 300?
+
+#### Solution
+The normal approximation for p for the sample size of 300 is better because the sample size is larger.
+
+### Question 4m.
+Simulate the sampling distribution for the sample proportion when the sample size is 30, p30, (using 5000 values). Create a plot that has the two densities of the simulated distributions of p30 and p300 (from 4b) on the same plot.
+
+#### Solution
+```{r}
+library(ggplot2)
+library(tidyverse)
+sample_diab_30 <- rbinom(5000, size = 30, prob = 0.185)
+rbind(data.frame("num" = sample_diab / 300, "sample_size" = "300"), 
+      data.frame("num" = sample_diab_30 / 30, "sample_size" = "30")) %>% 
+  ggplot(aes(x = num)) + 
+  geom_histogram(aes(fill = sample_size)) +
+  labs(title = "Sample Distribution Based on Sample Size",
+       x = "Proportion",
+       y = "Counts",
+       fill = "Sample Size")
+```
+
+### Question 4n.
+How do the two distributions in 4m compare? Describe similarities and differences.
+
+#### Solution
+The distribution for the 30 sample size is wider compared to the distribution of the 300 sample size.
